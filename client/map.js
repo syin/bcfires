@@ -8,13 +8,27 @@ const svg = d3.select("body")
                 .attr("width", width)
                 .attr("height", height);
 
-d3.json("output_simplified.json", function(json) {
+// // d3.json("output_simplified.json", function(json) {
+//     svg.selectAll("path")
+//         .data(json.features)
+//         .enter()
+//         .append("path")
+//         .attr("d", path);
+// });
+
+const drawGraph = fires => {
     svg.selectAll("path")
-        .data(json.features)
+        .data(fires)
         .enter()
         .append("path")
         .attr("d", path);
-});
+}
+
+fetch('2014-fires')
+    .then(response => response.json())
+    .then(arrayOfFires => drawGraph(arrayOfFires))
+
+
 
 // var url = "http://enjalot.github.io/wwsd/data/world/world-110m.geojson";
 // d3.json(url, function(err, geojson) {
