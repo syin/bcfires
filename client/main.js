@@ -5,6 +5,8 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+const fires = jsonfile.features
+
 app.use((request, response, next) => {
     next();
 });
@@ -26,10 +28,10 @@ app.get('/output_simplified.json', (request, response) => {
     response.sendFile(__dirname + "/output_simplified.json");
 });
 
-app.get('/2014-fires', (req, res) => {
-    const fires = jsonfile.features
-    const firesIn2014 = utils.filterFiresByYear(2014)(fires)
-    res.send(firesIn2014)
+app.get('/fires/:year', (req, res) => {
+    const year = req.params.year
+    const firesInYear = utils.filterFiresByYear(year)(fires)
+    res.send(firesInYear)
 })
 
 app.listen(port, (err) => {

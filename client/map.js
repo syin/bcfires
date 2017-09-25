@@ -24,10 +24,9 @@ const drawGraph = fires => {
         .attr("d", path);
 }
 
-fetch('2014-fires')
-    .then(response => response.json())
-    .then(arrayOfFires => drawGraph(arrayOfFires))
+const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
 
+getFiresByYear(2014).then(x => drawGraph(x))
 
 
 // var url = "http://enjalot.github.io/wwsd/data/world/world-110m.geojson";
