@@ -16,6 +16,14 @@ app.get('/', (request, response) => {
     response.sendFile(__dirname + "/map.html");
 });
 
+app.get('/map.js', (request, response) => {
+    response.sendFile(__dirname + "/map.js");
+});
+
+app.get('/output_simplified.json', (request, response) => {
+    response.sendFile(__dirname + "/output_simplified.json");
+});
+
 app.listen(port, (err) => {
     if (err) {
         return console.log("error", err);
