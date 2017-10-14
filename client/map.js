@@ -1,36 +1,29 @@
-const width = 500;
-const height = 300;
+const width = 800;
+const height = 800;
 
-const path = d3.geoPath().projection(d3.geoMercator().center([-124.629726, 54.588773]).scale(200));
+const path = d3.geoPath()
+    .projection(d3.geoMercator()
+        .center([-124.629726, 54.588773])
+        .scale(1000));
 
 const svg = d3.select("body")
                 .append("svg")
                 .attr("width", width)
-                .attr("height", height);
+                .attr("height", height)
 
-// // d3.json("output_simplified.json", function(json) {
-//     svg.selectAll("path")
-//         .data(json.features)
-//         .enter()
-//         .append("path")
-//         .attr("d", path);
-// });
-
-const drawGraph = fires => {
+const drawGraph = (json, fill) => {
     svg.selectAll("path")
-        .data(fires)
+        .data(json)
         .enter()
         .append("path")
-        .attr("d", path);
+        .attr("d", path)
+        .style("fill", fill)
 }
+
+d3.json("bcmap.geojson", json => {
+    drawGraph([json], "#cdcdcd")
+})
 
 const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
 
-getFiresByYear(2014).then(x => drawGraph(x))
-
-
-// var url = "http://enjalot.github.io/wwsd/data/world/world-110m.geojson";
-// d3.json(url, function(err, geojson) {
-//     svg.append("path")
-//         .attr("d", path(geojson))
-// })
+getFiresByYear(2014).then(x => drawGraph(x, "red"))

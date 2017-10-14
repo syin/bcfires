@@ -28,6 +28,10 @@ app.get('/output_simplified.json', (request, response) => {
     response.sendFile(__dirname + "/output_simplified.json");
 });
 
+app.get('/bcmap.geojson', (request, response) => {
+    response.sendFile(__dirname + "/bcmap.geojson")
+})
+
 app.get('/fires/:year', (req, res) => {
     const year = req.params.year
     const firesInYear = utils.filterFiresByYear(year)(fires)
