@@ -6,7 +6,13 @@ const colours = {
     lightGrey: "#cdcdcd",
     darkGrey: "#333333",
     red: "red",
+}
 
+const sliderProps = {
+    minYear: 1917,
+    maxYear: 2016,
+    lineStart: {"x": 50, "y": 600},
+    lineLength: 700,
 }
 
 const path = d3.geoPath()
@@ -32,36 +38,34 @@ const drawGraph = (json, fill, id) => {
 
 const drawMap = () => {
     d3.json("bcmap.geojson", json => {
-        drawGraph([json], colours.lightGrey, "bcmap")
+        drawGraph([json], colours.lightGrey, "bcMap")
     })
 }
 
 const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
 
 const slider = () => {
-    const minYear = 1917
-    const maxYear = 2016
-    const currentYearScaled = (year - minYear) / (maxYear - minYear)
-
-    const lineStart = {"x": 50, "y": 600}
-    const lineLength = 700
+    const currentYearScaled = (year - sliderProps.minYear) / (sliderProps.maxYear - sliderProps.minYear)
 
     const slider = svg.append("g")
-        .attr("id", "yearslider")
+        .attr("id", "yearSlider")
 
     const line = slider.append("line")
-        .attr("x1", lineStart.x)
-        .attr("y1", lineStart.y)
-        .attr("x2", lineStart.x + lineLength)
-        .attr("y2", lineStart.y)
+        .attr("id", "yearAxis")
+        .attr("x1", sliderProps.lineStart.x)
+        .attr("y1", sliderProps.lineStart.y)
+        .attr("x2", sliderProps.lineStart.x + sliderProps.lineLength)
+        .attr("y2", sliderProps.lineStart.y)
         .attr("stroke-width", 3)
         .attr("stroke", colours.lightGrey)
+        .attr("class", "clickable")
+        .on("click", sliderClickHandler)
 
-
-    const markerInit = {"x": lineStart.x + lineLength * currentYearScaled, "y": lineStart.y}
+    const markerInit = {"x": sliderProps.lineStart.x + sliderProps.lineLength * currentYearScaled, "y": sliderProps.lineStart.y}
     const markerRadius = 10
 
     const marker = slider.append("circle")
+        .attr("id", "yearMarker")
         .attr("cx", markerInit.x)
         .attr("cy", markerInit.y)
         .attr("r", markerRadius)
@@ -70,18 +74,18 @@ const slider = () => {
 
     const axis = slider.append("g")
     axisFontProperties(axis.append("text")
-        .attr("x", lineStart.x)
-        .attr("y", lineStart.y + 30)
+        .attr("x", sliderProps.lineStart.x)
+        .attr("y", sliderProps.lineStart.y + 30)
         .text(minYear))
 
     axisFontProperties(axis.append("text")
-        .attr("x", lineStart.x + lineLength)  // find a way to do the align-right text and prevent overlapping
-        .attr("y", lineStart.y + 30)
+        .attr("x", sliderProps.lineStart.x + sliderProps.lineLength)  // find a way to do the align-right text and prevent overlapping
+        .attr("y", sliderProps.lineStart.y + 30)
         .text(maxYear))
 
     axisFontProperties(axis.append("text")
-        .attr("x", lineStart.x + lineLength * currentYearScaled)
-        .attr("y", lineStart.y + 30)
+        .attr("x", sliderProps.lineStart.x + sliderProps.lineLength * currentYearScaled)
+        .attr("y", sliderProps.lineStart.y + 30)
         .attr("font-size", "20px")
         .attr("fill", colours.red)
         .text(year))
@@ -94,11 +98,22 @@ const axisFontProperties = (text) => {
         .attr("font-family", "sans-serif")
 }
 
+const sliderClickHandler = function() {
+    // Note: `this` doesn't work with arrow functions
+    // clicking along the axis
+    const coords = d3.mouse(this)
+    console.log("clicked", coords)
+}
+
+const sliderDragHandler = () => {
+    // dragging the marker
+}
+
 const init = () => {
     year = 2010
     drawMap()
     slider()
-    getFiresByYear(year).then(x => drawGraph(x, colours.red, "firepolygons"))
+    getFiresByYear(year).then(x => drawGraph(x, colours.red, "firePolygons"))
 }
 
 init()
