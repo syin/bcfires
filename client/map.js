@@ -19,8 +19,10 @@ const svg = d3.select("body")
     .attr("width", width)
     .attr("height", height)
 
-const drawGraph = (json, fill) => {
-    svg.selectAll("path")
+const drawGraph = (json, fill, id) => {
+    svg.append("g")
+        .attr("id", id)
+        .selectAll("path")
         .data(json)
         .enter()
         .append("path")
@@ -30,7 +32,7 @@ const drawGraph = (json, fill) => {
 
 const drawMap = () => {
     d3.json("bcmap.geojson", json => {
-        drawGraph([json], colours.lightGrey)
+        drawGraph([json], colours.lightGrey, "bcmap")
     })
 }
 
@@ -44,7 +46,10 @@ const slider = () => {
     const lineStart = {"x": 50, "y": 600}
     const lineLength = 700
 
-    const line = svg.append("line")
+    const slider = svg.append("g")
+        .attr("id", "yearslider")
+
+    const line = slider.append("line")
         .attr("x1", lineStart.x)
         .attr("y1", lineStart.y)
         .attr("x2", lineStart.x + lineLength)
@@ -56,18 +61,18 @@ const slider = () => {
     const markerInit = {"x": lineStart.x + lineLength * currentYearScaled, "y": lineStart.y}
     const markerRadius = 10
 
-    const marker = svg.append("circle")
+    const marker = slider.append("circle")
         .attr("cx", markerInit.x)
         .attr("cy", markerInit.y)
         .attr("r", markerRadius)
         .attr("fill", colours.darkGrey)
+        .attr("class", "draggable")
 
-    const axis = svg.append("g")
+    const axis = slider.append("g")
     axisFontProperties(axis.append("text")
         .attr("x", lineStart.x)
         .attr("y", lineStart.y + 30)
         .text(minYear))
-
 
     axisFontProperties(axis.append("text")
         .attr("x", lineStart.x + lineLength)  // find a way to do the align-right text and prevent overlapping
@@ -80,7 +85,6 @@ const slider = () => {
         .attr("font-size", "20px")
         .attr("fill", colours.red)
         .text(year))
-
 }
 
 const axisFontProperties = (text) => {
@@ -94,7 +98,7 @@ const init = () => {
     year = 2010
     drawMap()
     slider()
-    getFiresByYear(year).then(x => drawGraph(x, colours.red))
+    getFiresByYear(year).then(x => drawGraph(x, colours.red, "firepolygons"))
 }
 
 init()
