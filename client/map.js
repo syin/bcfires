@@ -37,6 +37,10 @@ const drawMap = () => {
 const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
 
 const slider = () => {
+    const minYear = 1917
+    const maxYear = 2016
+    const currentYearScaled = (year - minYear) / (maxYear - minYear)
+
     const lineStart = {"x": 50, "y": 600}
     const lineLength = 700
 
@@ -49,7 +53,7 @@ const slider = () => {
         .attr("stroke", colours.lightGrey)
 
 
-    const markerInit = {"x": 700, "y": lineStart.y}
+    const markerInit = {"x": lineStart.x + lineLength * currentYearScaled, "y": lineStart.y}
     const markerRadius = 10
 
     const marker = svg.append("circle")
@@ -57,6 +61,33 @@ const slider = () => {
         .attr("cy", markerInit.y)
         .attr("r", markerRadius)
         .attr("fill", colours.darkGrey)
+
+    const axis = svg.append("g")
+    axisFontProperties(axis.append("text")
+        .attr("x", lineStart.x)
+        .attr("y", lineStart.y + 30)
+        .text(minYear))
+
+
+    axisFontProperties(axis.append("text")
+        .attr("x", lineStart.x + lineLength)  // find a way to do the align-right text and prevent overlapping
+        .attr("y", lineStart.y + 30)
+        .text(maxYear))
+
+    axisFontProperties(axis.append("text")
+        .attr("x", lineStart.x + lineLength * currentYearScaled)
+        .attr("y", lineStart.y + 30)
+        .attr("font-size", "20px")
+        .attr("fill", colours.red)
+        .text(year))
+
+}
+
+const axisFontProperties = (text) => {
+    // idk how to chain this
+    text.attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .attr("font-family", "sans-serif")
 }
 
 const init = () => {
