@@ -1,4 +1,4 @@
-/* global d3, fetch */
+/* global d3, $, fetch */
 
 const width = 800
 const height = 800
