@@ -3,15 +3,7 @@
 const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
 
 document.addEventListener('DOMContentLoaded', function () {
-  $('#slider').ionRangeSlider({
-    min: 1917,
-    max: 2016,
-    step: 1,
-    onFinish: function (data) {
-      console.log(data.from)
-      getFiresByYear(data.from).then(x => drawGraph(x, colours.red, 'firePolygons'))
-    }
-  })
+  
   const width = 800
   const height = 800
   let year = null
@@ -43,6 +35,12 @@ document.addEventListener('DOMContentLoaded', function () {
       .style('fill', fill)
   }
 
+  const clearMap = () => {
+    d3.selectAll('#firePolygons path')
+      .transition()
+      .remove()
+  }
+
   const drawMap = () => {
     d3.json('bcmap.geojson', json => {
       drawGraph([json], colours.lightGrey, 'bcMap')
@@ -52,10 +50,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const init = () => {
     year = 2010
     drawMap()
-    // slider()
     getFiresByYear(year).then(x => drawGraph(x, colours.red, 'firePolygons'))
   }
   init()
 
+  $('#slider').ionRangeSlider({
+    min: 1917,
+    max: 2016,
+    step: 1,
+    onFinish: function (data) {
+      clearMap()
+      getFiresByYear(data.from).then(x => drawGraph(x, colours.red, 'firePolygons'))
+    }
+  })
 }, false)
-
