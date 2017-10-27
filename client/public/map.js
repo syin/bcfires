@@ -34,6 +34,7 @@ const drawGraph = (json, fill, id) => {
         .data(json)
         .enter()
         .append('path')
+        .transition()
         .attr('d', path)
         .style('fill', fill)
 }
@@ -45,7 +46,9 @@ const drawMap = () => {
 }
 
 const clearMap = () => {
-    d3.selectAll('#firePolygons path').remove()
+    d3.selectAll('#firePolygons path')
+      .transition()
+      .remove()
 }
 
 const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
@@ -109,6 +112,7 @@ const sliderClickHandler = function () {
     // clicking along the axis
   const coords = d3.mouse(this)
   console.log('clicked', coords)
+  clearMap()
 }
 
 const sliderDragHandler = () => {
