@@ -44,6 +44,10 @@ const drawMap = () => {
   })
 }
 
+const clearMap = () => {
+    d3.selectAll('#firePolygons path').remove()
+}
+
 const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
 
 const slider = () => {
