@@ -3,6 +3,15 @@
 const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
 
 document.addEventListener('DOMContentLoaded', function () {
+  $('#slider').ionRangeSlider({
+    min: 1917,
+    max: 2016,
+    step: 1,
+    onFinish: function (data) {
+      console.log(data.from)
+      getFiresByYear(data.from).then(x => drawGraph(x, colours.red, 'firePolygons'))
+    }
+  })
   const width = 800
   const height = 800
   let year = null
@@ -18,8 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
       .center([-124.629726, 54.588773])
       .scale(1500))
 
-  const svg = d3.select('body')
-    .append('svg')
+  const svg = d3.select('#graph')
+    .attr('id', 'graph')
     .attr('width', width)
     .attr('height', height)
 
@@ -48,10 +57,5 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   init()
 
-  $('#slider').ionRangeSlider({
-    min: 1917,
-    max: 2016,
-    grid: true,
-    grid_num: 10
-  })
 }, false)
+
