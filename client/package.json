@@ -12,14 +12,14 @@
   "author": "James Kyle <me@thejameskyle.com>",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.11.4",
+    "babel-cli": "^6.26.0",
     "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-stage-2": "^6.11.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.11.6",
     "express": "^4.15.4",
     "mocha": "^3.0.1",
-    "nodemon": "^1.10.0"
+    "nodemon": "^1.12.1"
   },
   "dependencies": {
     "ramda": "^0.24.1",
