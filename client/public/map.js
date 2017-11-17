@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .attr("font-size", "11px")
             .attr("font-weight", "bold")
             .attr("fill", "black")
-            .text("Area: " + d.properties.SIZE_HA);
+            .text("Area: " + d.properties.SIZE_HA + " ha");
         }
       })
       .on("mouseout", function(d) {
