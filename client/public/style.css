@@ -1,5 +1,9 @@
 /* general */
 
+body {
+    font-family: 'Karla', sans-serif;
+}
+
 .draggable {
     cursor: move;
 }
@@ -8,6 +12,36 @@
     cursor: pointer;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
+/* layout */
+
+#container {
+    position: relative;
+    width: 800px;
+    height: 800px;
+}
+
+#graph {
+    position: absolute;
+}
+
+/* tooltips */
+#tooltip {
+    position: absolute;
+    padding: 1em;
+    background-color: #fff;
+}
+
+#tooltip .row {
+    display: block;
+}
+
+#tooltip .label {
+    font-weight: bold;
+}
 
 /* override slider styling */
 

@@ -37,30 +37,29 @@ document.addEventListener('DOMContentLoaded', function () {
       .attr("y", 500)
       .on("mouseover", function(d) {
         if (d.type === "Feature") {
-          const svgText = svg.append("text")
-            .attr("id", "tooltip")
-            .attr("x", d3.select(this).attr("x"))
-            .attr("y", d3.select(this).attr("y"))
-            .attr("text-anchor", "middle")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", "11px")
-            .attr("font-weight", "bold")
-            .attr("fill", "black")
+          console.log(this.getBBox())
+          // calculate midpoint of polygon
+          const bbox = this.getBBox()
+          const cx = bbox.x + bbox.width/2
+          const cy = bbox.y + bbox.height/2
+          const offset = 10
+          const finalx = (cx + offset) + "px"
+          const finaly = (cy + offset) + "px"
 
-          const fireSize = svgText.append("tspan")
-            .text("Area: " + d.properties.SIZE_HA + " ha")
-            .attr("dy", "1.2em")
-            .attr("x", "100")
-          const fireCause = svgText.append("tspan")
-            .text("Cause: " + d.properties.FIRE_CAUSE)
-            .attr("dy", "1.2em")
-            .attr("x", "100")
+          const fireSizeElem = document.getElementById("fire_area")
+          fireSizeElem.innerHTML = d.properties.SIZE_HA + " ha"
+          const fireCauseElem = document.getElementById("fire_cause")
+          fireCauseElem.innerHTML = d.properties.FIRE_CAUSE
 
+          d3.select("#tooltip")
+            .style("left", finalx)
+            .style("top", finaly)
+            .classed("hidden", false)
         }
       })
       .on("mouseout", function(d) {
         if (d.type === "Feature") {
-          d3.select("#tooltip").remove();
+          d3.select("#tooltip").classed("hidden", true);
         }
       })
   }
@@ -78,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const aggregateStats = (data) => {
-      console.log(data)
       const totalFireArea = Math.round(
         data.reduce((acc, fire) => {
           return acc + fire.properties.SIZE_HA
@@ -92,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const init = () => {
-    year = 2006
+    year = 2010
     drawMap()
     getFiresByYear(year).then(x => render(x))
   }
@@ -101,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#slider').ionRangeSlider({
     min: 1917,
     max: 2016,
-    from: 2006,
+    from: 2010,
     step: 1,
     prettify_enabled: false,
     onFinish: function (data) {

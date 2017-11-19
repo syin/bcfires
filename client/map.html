@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="ion.rangeSlider.css">
     <link rel="stylesheet" href="ion.rangeSlider.skinFlat.css">
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Karla:400,700" rel="stylesheet">
     <title>BC Fires</title>
 </head>
 
@@ -14,8 +15,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="map.js"></script>
     <script src="ion.rangeSlider.js"></script>
-    <svg id="graph"></svg>
+
+    <div id="container">
+        <svg id="graph"></svg>
+        <div id="tooltip" class="hidden">
+            <span class="row">
+                <span class="label">Area:</span>
+                <span id="fire_area"></span>
+            </span>
+            <span class="row">
+                <span class="label">Cause:</span>
+                <span id="fire_cause"></span>
+            </span>
+        </div>
+    </div>
+
     <div id="stats">Total Fire Area: <span id="totalFireArea"></span> ha</div>
+
     <input id="slider" type="text" value="" />
 </body>
 
