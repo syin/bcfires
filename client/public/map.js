@@ -37,8 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .attr("y", 500)
       .on("mouseover", function(d) {
         if (d.type === "Feature") {
-          console.log(d.properties.SIZE_HA)
-          svg.append("text")
+          const svgText = svg.append("text")
             .attr("id", "tooltip")
             .attr("x", d3.select(this).attr("x"))
             .attr("y", d3.select(this).attr("y"))
@@ -47,7 +46,16 @@ document.addEventListener('DOMContentLoaded', function () {
             .attr("font-size", "11px")
             .attr("font-weight", "bold")
             .attr("fill", "black")
-            .text("Area: " + d.properties.SIZE_HA + " ha");
+
+          const fireSize = svgText.append("tspan")
+            .text("Area: " + d.properties.SIZE_HA + " ha")
+            .attr("dy", "1.2em")
+            .attr("x", "100")
+          const fireCause = svgText.append("tspan")
+            .text("Cause: " + d.properties.FIRE_CAUSE)
+            .attr("dy", "1.2em")
+            .attr("x", "100")
+
         }
       })
       .on("mouseout", function(d) {
