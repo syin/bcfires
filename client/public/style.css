@@ -1,0 +1,17 @@
+/* general */
+
+.draggable {
+    cursor: move;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+
+/* override slider styling */
+
+.irs-single {
+    font-size: 3em;
+    top: -50px;
+}

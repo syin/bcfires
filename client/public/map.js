@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const init = () => {
-    year = 2010
+    year = 2006
     drawMap()
     getFiresByYear(year).then(x => render(x))
   }
@@ -101,7 +101,9 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#slider').ionRangeSlider({
     min: 1917,
     max: 2016,
+    from: 2006,
     step: 1,
+    prettify_enabled: false,
     onFinish: function (data) {
       clearMap()
       getFiresByYear(data.from).then(x => render(x))
