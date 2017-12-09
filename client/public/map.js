@@ -99,6 +99,26 @@ document.addEventListener('DOMContentLoaded', function () {
     onFinish: function (data) {
       clearMap()
       getFiresByYear(data.from).then(x => render(x))
+      adjustLabelMargin()
     }
   })
+
+  const adjustLabelMargin = () => {
+    // Adjust position of year label so that it doesn't get cut off
+    const leftMargin = 0.0530483
+    const rightMargin = 88.3731
+
+    const yearLabel = document.getElementsByClassName("irs-single")[0]
+    const position = parseFloat(yearLabel.style.left)
+
+    const format = (inputFloat) => {
+      return inputFloat.toString() + "%"
+    }
+
+    if (position > rightMargin) {
+      yearLabel.style.left = format(rightMargin)
+    } else if (position < leftMargin) {
+      yearLabel.style.left = format(leftMargin)
+    }
+  }
 }, false)
