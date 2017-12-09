@@ -3,7 +3,6 @@
 const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
 
 document.addEventListener('DOMContentLoaded', function () {
-  
   const width = 800
   const height = 800
   let year = null
@@ -37,26 +36,26 @@ document.addEventListener('DOMContentLoaded', function () {
         if (d.type === "Feature") {
           // calculate midpoint of polygon
           const bbox = this.getBBox()
-          const cx = bbox.x + bbox.width/2
-          const cy = bbox.y + bbox.height/2
+          const cx = bbox.x + bbox.width / 2
+          const cy = bbox.y + bbox.height / 2
           const offset = 10
-          const finalx = (cx + offset) + "px"
-          const finaly = (cy + offset) + "px"
+          const finalx = (cx + offset) + 'px'
+          const finaly = (cy + offset) + 'px'
 
-          const fireSizeElem = document.getElementById("fire_area")
-          fireSizeElem.innerHTML = d.properties.SIZE_HA + " ha"
-          const fireCauseElem = document.getElementById("fire_cause")
+          const fireSizeElem = document.getElementById('fire_area')
+          fireSizeElem.innerHTML = d.properties.SIZE_HA + ' ha'
+          const fireCauseElem = document.getElementById('fire_cause')
           fireCauseElem.innerHTML = d.properties.FIRE_CAUSE
 
-          d3.select("#tooltip")
-            .style("left", finalx)
-            .style("top", finaly)
-            .classed("hidden", false)
+          d3.select('#tooltip')
+            .style('left', finalx)
+            .style('top', finaly)
+            .classed('hidden', false)
         }
       })
-      .on("mouseout", function(d) {
-        if (d.type === "Feature") {
-          d3.select("#tooltip").classed("hidden", true);
+      .on('mouseout', function (d) {
+        if (d.type === 'Feature') {
+          d3.select('#tooltip').classed('hidden', true)
         }
       })
   }
@@ -74,11 +73,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const aggregateStats = (data) => {
-      const totalFireArea = Math.round(
-        data.reduce((acc, fire) => {
-          return acc + fire.properties.SIZE_HA
-        }, 0))
-      document.getElementById("totalFireArea").innerHTML = totalFireArea
+    const totalFireArea = Math.round(
+        data.reduce((acc, fire) => acc + fire.properties.SIZE_HA, 0))
+    document.getElementById('totalFireArea').innerHTML = totalFireArea
   }
 
   const render = (data) => {
@@ -105,4 +102,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   })
 }, false)
-
