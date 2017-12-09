@@ -3,9 +3,9 @@
 const getFiresByYear = (year) => fetch('/fires/' + year).then(response => response.json())
 
 document.addEventListener('DOMContentLoaded', function () {
-  const width = 800
-  const height = 800
   let year = null
+  const width = 800
+  const height = 700
 
   const colours = {
     lightGrey: '#cdcdcd',
@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const svg = d3.select('#graph')
     .attr('id', 'graph')
-    .attr('width', width)
-    .attr('height', height)
+    .attr('viewBox', "0 0 " + width + " " + height)
+    .attr('preserveAspectRatio', "xMidYMid meet")
 
   const drawGraph = (json, fill, id) => {
     svg.append('g')
