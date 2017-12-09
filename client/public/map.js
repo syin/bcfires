@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const path = d3.geoPath()
     .projection(d3.geoMercator()
-      .center([-124.629726, 54.588773])
-      .scale(1500))
+      .center([-121.5, 54.588773])
+      .scale(2200))
 
   const svg = d3.select('#graph')
     .attr('id', 'graph')
@@ -33,11 +33,8 @@ document.addEventListener('DOMContentLoaded', function () {
       .append('path')
       .attr('d', path)
       .style('fill', fill)
-      .attr("x", 500)
-      .attr("y", 500)
       .on("mouseover", function(d) {
         if (d.type === "Feature") {
-          console.log(this.getBBox())
           // calculate midpoint of polygon
           const bbox = this.getBBox()
           const cx = bbox.x + bbox.width/2
