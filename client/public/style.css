@@ -4,6 +4,21 @@ body {
     font-family: 'Source Sans Pro', sans-serif;
 }
 
+h1, h2 {
+    font-family: 'Miriam Libre', serif;
+    font-weight: 400;
+    color: #ed5565;
+}
+
+h1 {
+    font-size: 4rem;
+}
+
+h2 {
+    font-size: 3rem;
+    margin: 0;
+}
+
 .draggable {
     cursor: move;
 }
@@ -26,7 +41,7 @@ body {
     margin: 0 auto;
 }
 
-#graph {
+#map {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -50,10 +65,18 @@ body {
 /* stats */
 
 #stats {
-    width: 500px;
+    width: 90%;
+    max-width: 500px;
     margin: 0 auto;
-    padding: 1em;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    padding: 2em;
     background-color: #eee;
+}
+
+#stats .bar text {
+    fill: #fff;
+    font: 10px sans-serif;
 }
 
 

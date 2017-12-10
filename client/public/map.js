@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const colours = {
     lightGrey: '#cdcdcd',
     darkGrey: '#333333',
-    red: 'red'
+    red: '#ed5565'
   }
 
   const path = d3.geoPath()
@@ -18,8 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .center([-121.5, 54.588773])
       .scale(2200))
 
-  const svg = d3.select('#graph')
-    .attr('id', 'graph')
+  const svg = d3.select('#map')
     .attr('viewBox', "0 0 " + width + " " + height)
     .attr('preserveAspectRatio', "xMidYMid meet")
 
@@ -74,8 +73,84 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const aggregateStats = (data) => {
     const totalFireArea = Math.round(
-        data.reduce((acc, fire) => acc + fire.properties.SIZE_HA, 0))
+      data.reduce((acc, fire) => acc + fire.properties.SIZE_HA, 0))
     document.getElementById('totalFireArea').innerHTML = totalFireArea
+
+    const avgFireArea = Math.round(totalFireArea / data.length)
+    document.getElementById('avgFireArea').innerHTML = avgFireArea
+
+    drawAreaHist(data)
+    drawCauseBarChart(data)
+  }
+
+  const drawAreaHist = (data) => {
+    // Adapted from http://bl.ocks.org/nnattawat/8916402
+    // and https://bl.ocks.org/mbostock/3048450
+
+    var color = colours.red;
+    const width = 500
+    const height = 300
+    const areas = data.map(elem => {
+      return elem.properties.SIZE_HA
+    })
+
+    const max = d3.max(areas)
+    const min = d3.min(areas)
+    const x = d3.scaleLinear()
+      .domain([min, max])
+      .range([0, width]);
+
+    const formatCount = d3.format(",.0f");
+
+    const bins = d3.histogram()
+      .domain(x.domain())
+      .thresholds(x.ticks(20))
+      (areas)
+
+    const yMax = d3.max(bins, function(d){return d.length});
+    const yMin = d3.min(bins, function(d){return d.length});
+    const colorScale = d3.scaleLinear()
+      .domain([yMin, yMax])
+      .range([d3.rgb(color).brighter(), d3.rgb(color).darker()]);
+
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(bins, function(d) { return d.length; })])
+      .range([height, 0]);
+
+    const svgHist = d3.select('#areaHist')
+      .attr('viewBox', "0 0 " + width + " " + (height + 40))
+      .attr('preserveAspectRatio', "xMidYMid meet")
+
+    const g = svgHist.append("g")
+
+    const bar = g.selectAll(".bar")
+      .data(bins)
+      .enter().append("g")
+        .attr("class", "bar")
+        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")" });
+
+    bar.append("rect")
+        .attr("x", 1)
+        .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
+        .attr("height", function(d) { return height - y(d.length) })
+        .attr("fill", function(d) { return colorScale(d.length) })
+
+    bar.append("text")
+        .attr("dy", ".75em")
+        .attr("y", 6)
+        .attr("x", (x(bins[0].x1) - x(bins[0].x0)) / 2)
+        .attr("text-anchor", "middle")
+        .text(function(d) { return formatCount(d.length) })
+
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+
+  }
+
+  drawCauseBarChart = (data) => {
+
   }
 
   const render = (data) => {

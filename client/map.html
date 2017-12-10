@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="ion.rangeSlider.css">
     <link rel="stylesheet" href="ion.rangeSlider.skinFlat.css">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Miriam+Libre" rel="stylesheet">
     <title>BC Fires</title>
 </head>
 
@@ -16,8 +16,10 @@
     <script src="map.js"></script>
     <script src="ion.rangeSlider.js"></script>
 
+    <h1>BC Fires</h1>
+
     <div id="container">
-        <svg id="graph"></svg>
+        <svg id="map"></svg>
         <div id="tooltip" class="hidden">
             <span class="row">
                 <span class="label">Area:</span>
@@ -30,7 +32,22 @@
         </div>
     </div>
 
-    <div id="stats">Total Fire Area: <span id="totalFireArea"></span> ha</div>
+    <div id="stats">
+        <h2>Summary</h2>
+        <ul>
+            <li><strong>Total Fire Area:</strong> <span id="totalFireArea"></span> ha</li>
+            <li><strong>Average Fire Area:</strong> <span id="avgFireArea"></span> ha</li>
+        </ul>
+
+        <strong>Distribution of Fire Area</strong>
+        <div id="areaHistContainer">
+            <svg id="areaHist"></svg>
+        </div>
+
+        <div id="causeBarContainer">
+            <svg id="causeBar"></svg>
+        </div>
+    </div>
 
     <input id="slider" type="text" value="" />
 </body>
