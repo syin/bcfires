@@ -18,6 +18,8 @@
 
     <h1>BC Fires</h1>
 
+    <input id="slider" type="text" value="" />
+
     <div id="container">
         <svg id="map"></svg>
         <div id="tooltip" class="hidden">
@@ -35,21 +37,21 @@
     <div id="stats">
         <h2>Summary</h2>
         <ul>
+            <li><strong>Number of Fires:</strong> <span id="fireCount"></span></li>
             <li><strong>Total Fire Area:</strong> <span id="totalFireArea"></span> ha</li>
             <li><strong>Average Fire Area:</strong> <span id="avgFireArea"></span> ha</li>
         </ul>
 
-        <strong>Distribution of Fire Area</strong>
+        <h3>Distribution of Fire Areas</h3>
         <div id="areaHistContainer">
             <svg id="areaHist"></svg>
         </div>
 
+        <h3>Distribution of Fire Causes</h3>
         <div id="causeBarContainer">
             <svg id="causeBar"></svg>
         </div>
     </div>
-
-    <input id="slider" type="text" value="" />
 </body>
 
 </html>

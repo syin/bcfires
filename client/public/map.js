@@ -72,6 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const aggregateStats = (data) => {
+    document.getElementById('fireCount').innerHTML = data.length
+
     const totalFireArea = Math.round(
       data.reduce((acc, fire) => acc + fire.properties.SIZE_HA, 0))
     document.getElementById('totalFireArea').innerHTML = totalFireArea
@@ -86,8 +88,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const drawAreaHist = (data) => {
     // Adapted from http://bl.ocks.org/nnattawat/8916402
     // and https://bl.ocks.org/mbostock/3048450
-
-    var color = colours.red;
     const width = 500
     const height = 300
     const areas = data.map(elem => {
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const yMin = d3.min(bins, function(d){return d.length});
     const colorScale = d3.scaleLinear()
       .domain([yMin, yMax])
-      .range([d3.rgb(color).brighter(), d3.rgb(color).darker()]);
+      .range([d3.rgb(colours.red).brighter(), d3.rgb(colours.red).darker()]);
 
     const y = d3.scaleLinear()
       .domain([0, d3.max(bins, function(d) { return d.length; })])
@@ -126,30 +126,105 @@ document.addEventListener('DOMContentLoaded', function () {
     const bar = g.selectAll(".bar")
       .data(bins)
       .enter().append("g")
-        .attr("class", "bar")
-        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")" });
+      .attr("class", "bar")
+      .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")" });
 
     bar.append("rect")
-        .attr("x", 1)
-        .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
-        .attr("height", function(d) { return height - y(d.length) })
-        .attr("fill", function(d) { return colorScale(d.length) })
+      .attr("x", 1)
+      .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
+      .attr("height", function(d) { return height - y(d.length) })
+      .attr("fill", function(d) { return colorScale(d.length) })
 
     bar.append("text")
-        .attr("dy", ".75em")
-        .attr("y", 6)
-        .attr("x", (x(bins[0].x1) - x(bins[0].x0)) / 2)
-        .attr("text-anchor", "middle")
-        .text(function(d) { return formatCount(d.length) })
+      .attr("dy", ".75em")
+      .attr("y", 6)
+      .attr("x", (x(bins[0].x1) - x(bins[0].x0)) / 2)
+      .attr("text-anchor", "middle")
+      .text(function(d) { return formatCount(d.length) })
 
     g.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x))
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
 
   }
 
   drawCauseBarChart = (data) => {
+    // Adapted from https://bl.ocks.org/hrecht/f84012ee860cb4da66331f18d588eee3
+    const width = 300
+    const height = 300
+
+    const causes = data.map(elem => {
+      return elem.properties.FIRE_CAUSE
+    })
+
+    const cause_dict = causes.reduce((acc, elem) => {
+      if (!acc[elem]) {
+        acc[elem] = 0
+      }
+      acc[elem] += 1
+      return acc
+    }, {})
+
+    const cause_list = Object.keys(cause_dict).reduce((acc, key) => {
+      acc.push({"name": key, "value": cause_dict[key]})
+      return acc
+    }, [])
+
+    const svgBar = d3.select('#causeBar')
+      .attr('viewBox', "-50 0 500 " + height)
+      .attr('preserveAspectRatio', "xMidYMid meet")
+
+    const x = d3.scaleLinear()
+      .range([0, width])
+      .domain([0, d3.max(cause_list, function (d) {
+        return d.value;
+      })])
+
+    const y = d3.scaleBand()
+      .range([height, 0], .1)
+      .domain(cause_list.map(function (d) {
+        return d.name;
+      }))
+
+    const yAxis = d3.axisLeft(y)
+      //no tick marks
+      .tickSize(0)
+
+    const gy = svgBar.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+
+    const bars = svgBar.selectAll(".bar")
+      .data(cause_list)
+      .enter()
+      .append("g")
+
+    //append rects
+    bars.append("rect")
+      .attr("class", "bar")
+      .attr("y", function (d) {
+          return y(d.name)
+      })
+      .attr("height", y.bandwidth())
+      .attr("x", 0)
+      .attr("width", function(d) {
+        return x(d.value)
+      })
+
+    bars.append("text")
+      .attr("class", "label")
+      //y position of the label is halfway down the bar
+      .attr("y", function (d) {
+        return y(d.name) + y.bandwidth() / 2 + 4
+      })
+      //x position is 3 pixels to the right of the bar
+      .attr("x", function (d) {
+        return x(d.value) + 3
+      })
+      .text(function (d) {
+        return d.value
+      })
 
   }
 

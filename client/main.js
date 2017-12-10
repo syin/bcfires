@@ -21,10 +21,6 @@ app.get('/', (request, response) => {
   response.sendFile(path.join(__dirname, '/map.html'))
 })
 
-// app.get('/map.js', (request, response) => {
-//   response.sendFile(__dirname + '/map.js')
-// })
-
 app.use(express.static('public'))
 
 app.get('/output_simplified.json', (request, response) => {
