@@ -2,6 +2,7 @@
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
+    color: #222;
 }
 
 h1, h2, h3 {
@@ -76,9 +77,9 @@ h2 {
     background-color: #eee;
 }
 
-#stats .bar text {
-    fill: #fff;
-    font: 10px sans-serif;
+#stats text {
+    fill: #222;
+    font: 12px 'Source Sans Pro';
 }
 
 
