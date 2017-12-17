@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const path = d3.geoPath()
     .projection(d3.geoMercator()
       .center([-121.5, 54.588773])
-      .scale(2200))
+      .scale(2000))
 
   const svg = d3.select('#map')
     .attr('viewBox', '0 0 ' + width + ' ' + height)
@@ -69,11 +69,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const clearMap = () => {
     d3.selectAll('#firePolygons path')
-      .transition()
       .remove()
 
     d3.selectAll('#areaHist g')
-      .transition()
       .remove()
 
     d3.selectAll('#causeBar g')
@@ -103,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const drawAreaHist = (data) => {
     // Adapted from http://bl.ocks.org/nnattawat/8916402
     // and https://bl.ocks.org/mbostock/3048450
+    const margin = {top: 10, right: 30, bottom: 30, left: 30}
     const width = 500
     const height = 300
     const areas = data.map(elem => {
@@ -166,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const drawCauseBarChart = (data) => {
-    console.log('in drawCause', data)
     // Adapted from https://bl.ocks.org/hrecht/f84012ee860cb4da66331f18d588eee3
     const width = 300
     const height = 300
