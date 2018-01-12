@@ -71,6 +71,9 @@ document.addEventListener('DOMContentLoaded', function () {
     d3.selectAll('#firePolygons path')
       .remove()
 
+    d3.selectAll('#firePolygonConvexHulls path')
+      .remove()
+
     d3.selectAll('#areaHist g')
       .remove()
 
@@ -244,15 +247,21 @@ document.addEventListener('DOMContentLoaded', function () {
       })
   }
 
-  const render = (data) => {
-    drawGraph(data, colours.red, 'firePolygons')
-    aggregateStats(data)
+  const render = (fires, fireConvexHulls) => {
+    console.log("fires", fires)
+    console.log("fireConvexHulls", fireConvexHulls)
+    drawGraph(fires, colours.red, 'firePolygons')
+    drawGraph(fireConvexHulls, "rgba(0,140,255,0)", 'firePolygonConvexHulls')
+    aggregateStats(fires)
   }
 
   const init = () => {
     year = 2010
     drawMap()
-    getFiresByYear(year).then(x => render(x))
+    getFiresByYear(year).then(res => {
+      [fires, fireConvexHulls] = res
+      render(fires, fireConvexHulls)
+    })
   }
   init()
 
@@ -264,7 +273,13 @@ document.addEventListener('DOMContentLoaded', function () {
     prettify_enabled: false,
     onFinish: function (data) {
       clearMap()
-      getFiresByYear(data.from).then(x => render(x))
+      // getFiresByYear(data.from).then(x => render(x))
+
+      getFiresByYear(data.from).then(res => {
+        [fires, fireConvexHulls] = res
+        render(fires, fireConvexHulls)
+      })
+
       adjustLabelMargin()
     }
   })

@@ -1,12 +1,13 @@
 import path from 'path'
 import * as utils from './utils'
-import jsonfile from './output_simplified.json'
+import fire_polygons from './output_simplified.json'
+import fire_convex_hulls from './output_simplified_padded.json'
 
 const express = require('express')
 const app = express()
 const port = 3000
 
-const fires = jsonfile.features
+const fires = fire_polygons.features
 
 app.use((request, response, next) => {
   next()
@@ -34,7 +35,8 @@ app.get('/bcmap.geojson', (request, response) => {
 app.get('/fires/:year', (req, res) => {
   const year = req.params.year
   const firesInYear = utils.filterFiresByYear(year)(fires)
-  res.send(firesInYear)
+  const firesInYearConvexHulls = utils.filterFiresByYear(year)(fire_convex_hulls)
+  res.send([firesInYear, firesInYearConvexHulls])
 })
 
 app.listen(port, (err) => {
