@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const colours = {
     lightGrey: '#cdcdcd',
     darkGrey: '#333333',
-    red: '#ed5565'
+    red: '#ed5565',
+    darkerRed: '#a63b47'
   }
 
   const path = d3.geoPath()
@@ -105,13 +106,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Adapted from http://bl.ocks.org/nnattawat/8916402
     // and https://bl.ocks.org/mbostock/3048450
     const margin = {top: 10, right: 30, bottom: 30, left: 30}
-    const width = 500
+    const width = 400
     const height = 300
     const areas = data.map(elem => {
       return elem.properties.SIZE_HA
     })
-
-    console.log('areas', areas)
 
     const max = d3.max(areas)
     const min = d3.min(areas)
@@ -119,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .domain([min, max])
       .range([0, width])
 
-    const formatCount = d3.format(',.0f')
+    const formatCount = d3.format(',')
 
     const bins = d3.histogram()
       .domain(x.domain())
@@ -127,16 +126,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const yMax = d3.max(bins, function (d) { return d.length })
     const yMin = d3.min(bins, function (d) { return d.length })
-    const colorScale = d3.scaleLinear()
-      .domain([yMin, yMax])
-      .range([d3.rgb(colours.red).brighter(), d3.rgb(colours.red).darker()])
 
     const y = d3.scaleLinear()
       .domain([0, d3.max(bins, function (d) { return d.length })])
       .range([height, 0])
 
     const svgHist = d3.select('#areaHist')
-      .attr('viewBox', '0 -10 ' + width + ' ' + (height + 40))
+      .attr('viewBox', '-10 -10 ' + (width + 40) + ' ' + (height + 40))
       .attr('preserveAspectRatio', 'xMidYMid meet')
 
     const g = svgHist.append('g')
@@ -151,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .attr('x', 1)
       .attr('width', x(bins[0].x1) - x(bins[0].x0) - 1)
       .attr('height', function (d) { return height - y(d.length) })
-      .attr('fill', function (d) { return colorScale(d.length) })
+      .attr('fill', colours.darkerRed)
 
     bar.append('text')
       .attr('dy', '.75em')
@@ -164,13 +160,13 @@ document.addEventListener('DOMContentLoaded', function () {
       .attr('class', 'axis axis--x')
       .attr('transform', 'translate(0,' + height + ')')
       .call(d3.axisBottom(x)
-              .tickFormat(d3.format('.0s')))
+              .tickFormat(d3.format('.3s')))
   }
 
   const drawCauseBarChart = (data) => {
     // Adapted from https://bl.ocks.org/hrecht/f84012ee860cb4da66331f18d588eee3
     const width = 300
-    const height = 300
+    const height = 150
 
     const causes = data.map(elem => {
       return elem.properties.FIRE_CAUSE
@@ -188,8 +184,6 @@ document.addEventListener('DOMContentLoaded', function () {
       acc.push({'name': key, 'value': cause_dict[key]})
       return acc
     }, [])
-
-    console.log(cause_list)
 
     const svgBar = d3.select('#causeBar')
       .attr('viewBox', '-50 0 500 ' + height)
@@ -231,6 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .attr('width', function (d) {
         return x(d.value)
       })
+      .attr("fill", colours.darkerRed)
 
     bars.append('text')
       .attr('class', 'label')
@@ -248,8 +243,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const render = (fires, fireConvexHulls) => {
-    console.log("fires", fires)
-    console.log("fireConvexHulls", fireConvexHulls)
     drawGraph(fires, colours.red, 'firePolygons')
     drawGraph(fireConvexHulls, "rgba(0,140,255,0)", 'firePolygonConvexHulls')
     aggregateStats(fires)
