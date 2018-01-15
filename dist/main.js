@@ -25,7 +25,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
-var port = 3000;
+var port = process.env.PORT || 8080;
 
 var fires = _output_simplified2.default.features;
 
