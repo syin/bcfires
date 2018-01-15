@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .range([height, 0])
 
     const svgHist = d3.select('#areaHist')
-      .attr('viewBox', '-10 -10 ' + (width + 40) + ' ' + (height + 40))
+      .attr('viewBox', '-10 -10 ' + (width + 40) + ' ' + (height + 60))
       .attr('preserveAspectRatio', 'xMidYMid meet')
 
     const g = svgHist.append('g')
@@ -161,6 +161,12 @@ document.addEventListener('DOMContentLoaded', function () {
       .attr('transform', 'translate(0,' + height + ')')
       .call(d3.axisBottom(x)
               .tickFormat(d3.format('.3s')))
+
+    g.append("text")
+      .attr("transform",
+            "translate(" + (width/2) + " ," + (height + margin.top + 30) + ")")
+      .style("text-anchor", "middle")
+      .text("Area of Fire (ha)");
   }
 
   const drawCauseBarChart = (data) => {

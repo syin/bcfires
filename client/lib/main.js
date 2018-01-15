@@ -1,9 +1,9 @@
+import express from 'express'
 import path from 'path'
 import * as utils from './utils'
-import fire_polygons from './output_simplified.json'
-import fire_convex_hulls from './output_simplified_padded.json'
+import fire_polygons from '../output_simplified.json'
+import fire_convex_hulls from '../output_simplified_padded.json'
 
-const express = require('express')
 const app = express()
 const port = 3000
 
@@ -19,17 +19,13 @@ app.use((err, request, response, next) => {
 })
 
 app.get('/', (request, response) => {
-  response.sendFile(path.join(__dirname, '/map.html'))
+  response.sendFile(path.join(__dirname, '../map.html'))
 })
 
 app.use(express.static('public'))
 
-app.get('/output_simplified.json', (request, response) => {
-  response.sendFile(path.join(__dirname, '/output_simplified.json'))
-})
-
 app.get('/bcmap.geojson', (request, response) => {
-  response.sendFile(path.join(__dirname, '/bcmap.geojson'))
+  response.sendFile(path.join(__dirname, '../bcmap.geojson'))
 })
 
 app.get('/fires/:year', (req, res) => {
