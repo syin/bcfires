@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  node:
+    build: .
+    volumes:
+      - .:/code
+    restart: always
+
+  nginx:
+    image: nginx:stable
+    ports:
+      - 8002:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - node
