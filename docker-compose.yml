@@ -5,7 +5,10 @@ services:
     build: .
     volumes:
       - .:/code
+      - /code/node_modules
     restart: always
+    networks:
+      - default
 
   nginx:
     image: nginx:stable
@@ -15,3 +18,18 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - node
+    restart: always
+    networks:
+      - default
+      - nginx-proxy_nginx-proxy
+    environment:
+      - VIRTUAL_PORT=8002
+      - VIRTUAL_HOST=bcfires.shirleyyin.com
+      - LETSENCRYPT_HOST=bcfires.shirleyyin.com
+      - LETSENCRYPT_EMAIL=contact@shirleyyin.com
+
+networks:
+  default:
+    driver: bridge
+  nginx-proxy_nginx-proxy:
+    external: true
